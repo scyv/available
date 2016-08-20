@@ -1,0 +1,35 @@
+
+<template name="dlgEditSprint">
+	<!-- Modal -->
+	<div class="modal fade" id="dlgEditSprint" tabindex="-1" role="dialog" aria-labelledby="dlgEditSprintLabel">
+		<div class="modal-dialog">
+			<div class="modal-content">
+          {{#with sprint}}
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title" id="dlgEditSprintLabel">Sprint bearbeiten</h4>
+						</div>
+						<div class="modal-body">
+							<h2>Sprint bearbeiten</h2>
+								<div class="form-group">
+									<label for="sprintNameInput">Name</label>
+									<input type="text" class="form-control sprintNameInput" placeholder="Sprint Name" value="{{name}}" id="sprintNameInput">
+								</div>
+								<div class="form-group">
+									<label for="dateRangeInput">Start/Ende</label>
+									<input type="text" class="form-control dateRangeInput" placeholder="Sprint Zeitraum" value="{{dateRange}}" id="dateRangeInput">
+								</div>
+								<div class="form-group">
+									<label for="burnedSPsInput">Benötigte Storypoints</label>
+									<input type="text" class="form-control burnedSPsInput" placeholder="z.B. 20" value="{{burnedSPs}}" id="burnedSPsInput">
+								</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary btnSaveSprint">Erfassen</button>
+							<button type="button" data-dismiss="modal" class="btn btn-default btnCancel">Verwerfen</button>
+						</div>
+          {{/with}}
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</template>

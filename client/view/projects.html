@@ -1,0 +1,40 @@
+<template name="projects">
+	<div class="table-striped">
+		{{#if projectsLoading}}
+			Laden...
+		{{else}}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Velocity</th>
+						<th>SPs</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+                    <tr>
+                        <td colspan="4">
+                            <button class="btn btn-success btnCreateProject">Projekt erstellen</button>
+                        </td>
+                    </tr>
+					{{#each projects}}
+						<tr>
+							<td>{{name}}</td>
+							<td>{{velocity}}</td>
+							<td>{{sps}}</td>
+							<td>
+								<button class="btn btn-default btn-xs pull-right btnOpenSprints">Sprints</button>
+								<button class="btn btn-default btn-xs pull-right btnEditProject">Bearbeiten</button>
+							</td>
+						</tr>
+					{{else}}
+						<tr>
+							<td colspan="4"><div class="alert alert-info">Es wurden noch keine Projekte erfasst.</div></td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		{{/if}}
+	</div>
+</template>

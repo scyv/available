@@ -1,0 +1,48 @@
+<template name="sprints">
+	<div class="table-striped">
+		{{#if sprintsLoading}}
+			Laden...
+		{{else}}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Datum Start</th>
+						<th>Datum Stop</th>
+						<th>Verfügbarkeiten</th>
+						<th>Mögliche SPs</th>
+						<th>Erreichte SPs</th>
+						<th>Velocity</th>
+                        <th></th>
+					</tr>
+				</thead>
+				<tbody>
+                    <tr>
+                        <td colspan="8">
+                                <button class="btn btn-success btnCreateSprint">Sprint anlegen</button>
+                        </td>
+                    </tr>
+					{{#each sprints}}
+						<tr>
+							<td>{{name}}</td>
+							<td>{{formattedDate start}}</td>
+							<td>{{formattedDate stop}}</td>
+							<td>{{availabilities}}</td>
+							<td>{{possibleSps}}</td>
+							<td>{{burnedSps}}</td>
+							<td>{{velocity}}</td>
+							<td>
+								<button class="btn btn-default btn-xs pull-right btnOpenAvailabilities">Verfügbarkeiten</button>
+								<button class="btn btn-default btn-xs pull-right btnEditSprint">Bearbeiten</button>
+							</td>
+						</tr>
+					{{else}}
+						<tr>
+							<td colspan="8"><div class="alert alert-info">Es wurden noch kein Sprint erfasst.</div></td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		{{/if}}
+	</div>
+</template>

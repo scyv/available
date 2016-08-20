@@ -1,0 +1,37 @@
+<template name="availabilities">
+	<div class="table-striped">
+		{{#if availabilitiesLoading}}
+			Laden...
+		{{else}}
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Teammitglied</th>
+						<th>Verfügbarkeit</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+                    <tr>
+                        <td colspan="3">
+                                <button class="btn btn-success btnAddAvailability">Verfügbarkeit anlegen</button>
+                        </td>
+                    </tr>
+					{{#each availabilities}}
+						<tr>
+							<td>{{name}}</td>
+							<td>{{availability}}</td>
+							<td>
+								<button class="btn btn-default btn-xs pull-right btnEditAvailability">Bearbeiten</button>
+							</td>
+						</tr>
+					{{else}}
+						<tr>
+							<td colspan="3"><div class="alert alert-info">Es wurden noch keine Verfügbarkeiten erfasst.</div></td>
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
+		{{/if}}
+	</div>
+</template>
