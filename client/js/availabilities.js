@@ -3,6 +3,12 @@ import {availabilitiesHandle} from './main';
 
 
 Template.availabilities.helpers({
+    selectedProject() {
+        return Projects.findOne(Session.get('selectedProject'));
+    },
+    selectedSprint() {
+        return Sprints.findOne(Session.get('selectedSprint'));
+    },
     availabilitiesLoading() {
         return !availabilitiesHandle.ready();
     },

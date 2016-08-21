@@ -1,4 +1,5 @@
 <template name="sprints">
+	<div class="breadcrumb"><a href="{{urlFor route='projects'}}">Projekte</a> &raquo; {{selectedProject.name}}</div>
 	<div class="table-striped">
 		{{#if sprintsLoading}}
 			Laden...
@@ -29,7 +30,7 @@
 							<td>{{formattedDate stop}}</td>
 							<td>{{availabilities}}</td>
 							<td>{{possibleSps}}</td>
-							<td>{{burnedSps}}</td>
+							<td>{{burnedSPs}}</td>
 							<td>{{velocity}}</td>
 							<td>
 								<button class="btn btn-default btn-xs pull-right btnOpenAvailabilities">Verfügbarkeiten</button>

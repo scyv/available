@@ -1,11 +1,19 @@
 import { Template } from 'meteor/templating';
 
+const getSelectedSprint = () => {
+    let selectedSprintId = Session.get('selectedSprint');
+    let sprint = undefined;
+    if (selectedSprintId) {
+        sprint = Sprints.findOne({ _id: selectedSprintId });
+    }
+    return sprint;
+};
+
 Template.dlgEditSprint.helpers({
     sprint() {
-        let selectedSprint = Session.get('selectedSprint');
-        let sprint = undefined;
-        if (selectedSprint) {
-            return Sprints.findOne({ _id: selectedSprint });
+        let sprint = getSelectedSprint();
+        if (sprint) {
+            return sprint;
         }
         return {name: 'Sprint X', burnedSPs:0};
     }
@@ -22,8 +30,6 @@ Template.dlgEditSprint.events({
 
         const obj = { name, start, stop, burnedSPs, projectId };
 
-        console.log(obj);
-        
         if (this._id) {
             Sprints.update({ _id: this._id }, { $set: obj });
         } else {
@@ -33,7 +39,23 @@ Template.dlgEditSprint.events({
     }
 });
 
-$(document).on('shown.bs.modal', '#dlgEditSprint', function () {
+$(document).on('show.bs.modal', '#dlgEditSprint', () => {
+    const sprint = getSelectedSprint();
+        const dateRange = $('#dateRangeInput').data('daterangepicker');
+    if (sprint) {
+        const format = dateRange.locale.format;
+        const separator = dateRange.locale.separator;
+        dateRange.startDate = moment(sprint.start);
+        dateRange.endDate = moment(sprint.stop);
+        $('#dateRangeInput').val(moment(sprint.start).format(format) + separator + moment(sprint.stop).format(format));
+    } else {
+        $('#dateRangeInput').val('');
+        dateRange.startDate = moment();
+        dateRange.endDate = moment();
+    }
+});
+
+$(document).on('shown.bs.modal', '#dlgEditSprint', () => {
     $('#sprintNameInput').focus();
 });
 

@@ -1,1 +1,6 @@
 /* CSS declarations go here */
+.breadcrumb {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 120%;
+}

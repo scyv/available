@@ -3,6 +3,9 @@ import {sprintsHandle} from './main';
 
 
 Template.sprints.helpers({
+    selectedProject() {
+        return Projects.findOne(Session.get('selectedProject'));
+    },
     sprintsLoading() {
         return !sprintsHandle.ready();
     },
