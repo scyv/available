@@ -16,6 +16,10 @@ Template.projects.events({
         Session.set('selectedProject', undefined);
         $('#dlgEditProject').modal('show');
     },
+    'click .btnEditProject'(event, instance) {
+        Session.set('selectedProject', this._id);
+        $('#dlgEditProject').modal('show');
+    },
     'click .btnOpenSprints'() {
         Router.go('sprints', { projectId: this._id });
     }
