@@ -3,12 +3,12 @@
 		{{#if projectsLoading}}
 			Laden...
 		{{else}}
-			<table class="table table-striped">
+			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Velocity</th>
-						<th>SPs</th>
+						<th class="center">Velocity</th>
+						<th class="center">SPs</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -21,8 +21,8 @@
 					{{#each projects}}
 						<tr>
 							<td>{{name}}</td>
-							<td>{{velocity}}</td>
-							<td>{{sps}}</td>
+							<td class="center">{{velocity}}</td>
+							<td class="center">{{sps}}</td>
 							<td>
 								<button class="btn btn-default btn-xs pull-right btnOpenSprints">Sprints</button>
 								<button class="btn btn-default btn-xs pull-right btnEditProject">Bearbeiten</button>

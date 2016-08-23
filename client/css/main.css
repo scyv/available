@@ -4,3 +4,11 @@
     margin-bottom: 10px;
     font-size: 120%;
 }
+
+button {
+    margin-right: 5px;
+}
+
+td.center, th.center {
+    text-align: center;
+}

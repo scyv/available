@@ -13,7 +13,7 @@ Template.availabilities.helpers({
         return !availabilitiesHandle.ready();
     },
     availabilities() {
-        return Availabilities.find();
+        return Availabilities.find({sprintId: Session.get('selectedSprint')});
     }
 });
 

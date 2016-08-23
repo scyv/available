@@ -19,6 +19,6 @@ Meteor.startup(() => {
     Tracker.autorun(() => {
         projectsHandle = Meteor.subscribe("projects");
         sprintsHandle = Meteor.subscribe("sprints", Session.get('selectedProject'));
-        availabilitiesHandle = Meteor.subscribe("availabilities", Session.get('selectedSprint'));
+        availabilitiesHandle = Meteor.subscribe("availabilities", Session.get('selectedProject'));
     });
 });

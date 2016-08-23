@@ -4,11 +4,11 @@
 		{{#if availabilitiesLoading}}
 			Laden...
 		{{else}}
-			<table class="table table-striped">
+			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
 						<th>Teammitglied</th>
-						<th>Verfügbarkeit</th>
+						<th class="center">Verfügbarkeit</th>
 						<th></th>
 					</tr>
 				</thead>
@@ -21,7 +21,7 @@
 					{{#each availabilities}}
 						<tr>
 							<td>{{name}}</td>
-							<td>{{availability}}</td>
+							<td class="center">{{availability}}</td>
 							<td>
 								<button class="btn btn-default btn-xs pull-right btnEditAvailability">Bearbeiten</button>
 							</td>

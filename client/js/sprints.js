@@ -1,6 +1,11 @@
 import { Template } from 'meteor/templating';
 import {sprintsHandle} from './main';
 
+const sumAvailabilities = (sprintId) => {
+    return Availabilities.find({ sprintId })
+        .fetch()
+        .reduce((pre, av) => (Math.abs(pre) + Math.abs(av.availability)), 0);    
+}
 
 Template.sprints.helpers({
     selectedProject() {
@@ -10,19 +15,27 @@ Template.sprints.helpers({
         return !sprintsHandle.ready();
     },
     sprints() {
-        return Sprints.find();
+        return Sprints.find({}, { sort: {stop: -1}});
     },
     availabilities() {
-        const sprintId = this._id;
-        return Availabilities.find({ sprintId })
-            .fetch()
-            .reduce((pre, av) => (Math.abs(pre) + Math.abs(av.availability)), 0);
+        return sumAvailabilities(this._id);
     },
     possibleSps() {
-        return 0;
+        let sumVelocity = 0;
+        let count = 0;
+        Sprints.find({ stop: { $lt: this.start } }).forEach((sprint) => {
+            sumVelocity += sprint.velocity;
+            count++;
+        });
+        if (count == 0) {
+            sumVelocity = 1;
+            count = 1;
+        }
+        const averageVelocity = sumVelocity / count;
+        return averageVelocity * sumAvailabilities(this._id);
     },
     velocity() {
-        return 0;
+        return 1;
     }
 });
 

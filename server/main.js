@@ -12,8 +12,8 @@ Meteor.publish("sprints", function (projectId) {
   return Sprints.find({projectId}); //, {fields: {secretInfo: 0}});
 });
 
-Meteor.publish("availabilities", function (sprintId) {
-  return Availabilities.find({sprintId}); //, {fields: {secretInfo: 0}});
+Meteor.publish("availabilities", function (projectId) {
+  return Availabilities.find({projectId}); //, {fields: {secretInfo: 0}});
 });
 
 const allowInsertUpdate = {

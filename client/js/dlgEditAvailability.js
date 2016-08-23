@@ -16,7 +16,8 @@ Template.dlgEditAvailability.events({
         const name = $('#developerNameInput').val();
         const availability = $('#availabilityInput').val();
         const sprintId = Session.get('selectedSprint');
-        const obj = { name, availability, sprintId };
+        const projectId = Session.get('selectedProject');
+        const obj = { name, availability, sprintId, projectId };
         if (this._id) {
             Availabilities.update({ _id: this._id }, { $set: obj });
         } else {

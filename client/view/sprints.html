@@ -4,16 +4,16 @@
 		{{#if sprintsLoading}}
 			Laden...
 		{{else}}
-			<table class="table table-striped">
+			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
 						<th>Name</th>
 						<th>Datum Start</th>
 						<th>Datum Stop</th>
-						<th>Verfügbarkeiten</th>
-						<th>Mögliche SPs</th>
-						<th>Erreichte SPs</th>
-						<th>Velocity</th>
+						<th class="center">Verfügbarkeiten</th>
+						<th class="center">Mögliche SPs</th>
+						<th class="center">Erreichte SPs</th>
+						<th class="center">Velocity</th>
                         <th></th>
 					</tr>
 				</thead>
@@ -28,10 +28,10 @@
 							<td>{{name}}</td>
 							<td>{{formattedDate start}}</td>
 							<td>{{formattedDate stop}}</td>
-							<td>{{availabilities}}</td>
-							<td>{{possibleSps}}</td>
-							<td>{{burnedSPs}}</td>
-							<td>{{velocity}}</td>
+							<td class="center">{{availabilities}}</td>
+							<td class="center">{{possibleSps}}</td>
+							<td class="center">{{burnedSPs}}</td>
+							<td class="center">{{velocity}}</td>
 							<td>
 								<button class="btn btn-default btn-xs pull-right btnOpenAvailabilities">Verfügbarkeiten</button>
 								<button class="btn btn-default btn-xs pull-right btnEditSprint">Bearbeiten</button>
