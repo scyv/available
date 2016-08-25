@@ -6,10 +6,6 @@ Template.projects.helpers({
     projectsLoading() {
         return !projectsHandle.ready();
     },
-    sps() {
-        return Sprints.find({ projectId: this._id }).fetch()
-        .reduce((pre, sprint) => (Math.abs(pre) + Math.abs(sprint.burnedSPs)), 0);
-    },
     projects() {
         return Projects.find();
     }

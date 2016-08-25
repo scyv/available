@@ -14,15 +14,13 @@
 				</thead>
 				<tbody>
                     <tr>
-                        <td colspan="4">
+                        <td colspan="2">
                             <button class="btn btn-success btnCreateProject">Projekt erstellen</button>
                         </td>
                     </tr>
 					{{#each projects}}
 						<tr>
 							<td>{{name}}</td>
-							<td class="center">{{velocity}}</td>
-							<td class="center">{{sps}}</td>
 							<td>
 								<button class="btn btn-default btn-xs pull-right btnOpenSprints">Sprints</button>
 								<button class="btn btn-default btn-xs pull-right btnEditProject">Bearbeiten</button>
@@ -30,7 +28,7 @@
 						</tr>
 					{{else}}
 						<tr>
-							<td colspan="4"><div class="alert alert-info">Es wurden noch keine Projekte erfasst.</div></td>
+							<td colspan="2"><div class="alert alert-info">Es wurden noch keine Projekte erfasst.</div></td>
 						</tr>
 					{{/each}}
 				</tbody>
