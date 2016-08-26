@@ -12,3 +12,7 @@ button {
 td.center, th.center {
     text-align: center;
 }
+
+tr.sprintRow, tr.projectRow {
+    cursor: pointer;
+}

@@ -24,18 +24,25 @@ Template.sprints.helpers({
         let sumVelocity = 0;
         let count = 0;
         Sprints.find({ stop: { $lt: this.start } }).forEach((sprint) => {
-            sumVelocity += sprint.velocity;
-            count++;
+            const availabilities = sumAvailabilities(sprint._id);
+            if (availabilities > 0) {
+                sumVelocity += sprint.burnedSPs / availabilities * 8;
+                count++;
+            }
         });
         if (count == 0) {
             sumVelocity = 1;
             count = 1;
         }
         const averageVelocity = sumVelocity / count;
-        return averageVelocity * sumAvailabilities(this._id);
+        return (averageVelocity * sumAvailabilities(this._id) / 8).toFixed(2);
     },
     velocity() {
-        return 1;
+        const availabilities = sumAvailabilities(this._id);
+        if (availabilities > 0) {
+            return (this.burnedSPs / availabilities).toFixed(2);
+        }
+        return 0;
     }
 });
 
@@ -43,12 +50,18 @@ Template.sprints.events({
     'click .btnCreateSprint'(event, instance) {
         Session.set('selectedSprint', undefined);
         $('#dlgEditSprint').modal('show');
+        return false;
     },
     'click .btnEditSprint'(event, instance) {
         Session.set('selectedSprint', this._id);
         $('#dlgEditSprint').modal('show');
+        return false;
     },
     'click .btnOpenAvailabilities'() {
         Router.go('availabilities', { sprintId: this._id });
+        return false;
+    },
+    'click tr.sprintRow'() {
+        Router.go('availabilities', { sprintId: this._id });        
     }
 });
