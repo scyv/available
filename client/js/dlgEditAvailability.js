@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import { Template } from 'meteor/templating';
 
 Template.dlgEditAvailability.helpers({
@@ -24,6 +25,12 @@ Template.dlgEditAvailability.events({
             Availabilities.insert(obj);
         }
         $('#dlgEditAvailability').modal('hide');
+    },
+    'click .btnDelete'() {
+        if (confirm("Wirklich löschen?")) {
+            Meteor.call('removeAvailability', this._id);
+            $('#dlgEditAvailability').modal('hide');
+        }
     }
 });
 

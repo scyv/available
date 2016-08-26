@@ -29,5 +29,4 @@ Template.projects.events({
     'click tr.projectRow'() {
         Router.go('sprints', { projectId: this._id });        
     }
-
 });

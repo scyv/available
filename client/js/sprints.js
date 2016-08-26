@@ -42,7 +42,7 @@ Template.sprints.helpers({
         if (availabilities > 0) {
             return (this.burnedSPs / availabilities).toFixed(2);
         }
-        return 0;
+        return (0.00).toFixed(2);
     }
 });
 

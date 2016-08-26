@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor'
 
 Template.dlgEditProject.helpers({
     project() {
@@ -20,6 +21,12 @@ Template.dlgEditProject.events({
             Projects.insert({ name: name });
         }
         $('#dlgEditProject').modal('hide');
+    },
+    'click .btnDelete'() {
+        if (confirm("Wirklich löschen?")) {
+            Meteor.call('removeProject', this._id);
+            $('#dlgEditProject').modal('hide');
+        }
     }
 });
 

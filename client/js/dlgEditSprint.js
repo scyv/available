@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Meteor } from 'meteor/meteor'
 
 const getSelectedSprint = () => {
     let selectedSprintId = Session.get('selectedSprint');
@@ -36,6 +37,12 @@ Template.dlgEditSprint.events({
             Sprints.insert(obj);
         }
         $('#dlgEditSprint').modal('hide');
+    },
+    'click .btnDelete'() {
+        if (confirm("Wirklich löschen?")) {
+            Meteor.call('removeSprint', this._id);
+            $('#dlgEditSprint').modal('hide');
+        }
     }
 });
 
