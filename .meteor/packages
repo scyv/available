@@ -22,3 +22,4 @@ dangrossman:bootstrap-daterangepicker
 momentjs:moment
 iron:router
 session
+rzymek:moment-locale-de
