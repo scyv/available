@@ -1,6 +1,10 @@
 /* CSS declarations go here */
+body {
+    padding-top: 10px;
+}
+
 .breadcrumb {
-    margin-top: 10px;
+    margin-top: 0;
     margin-bottom: 10px;
     font-size: 120%;
 }
@@ -16,3 +20,4 @@ td.center, th.center {
 tr.sprintRow, tr.projectRow {
     cursor: pointer;
 }
+

@@ -18,24 +18,19 @@ Router.route('/login', function () {
 
 Router.route('/project/:projectId', function () {
     const projectId = this.params.projectId;
-    if (!Meteor.userId()) {
-        Meteor.subscribe("projects", projectId);
-    }
+    Meteor.subscribe("projects", projectId);
     Session.set('selectedProject', projectId);
     this.render('sprints');
 }, { name: 'sprints' });
 
 Router.route('/sprint/:sprintId', function () {
     const sprintId = this.params.sprintId;
-    if (!Meteor.userId()) {
-        Meteor.subscribe("singleSprint", sprintId, () => {
-            const projectId = Sprints.findOne().projectId;
-            console.log(projectId);
-            Meteor.subscribe("projects", projectId, () => {
-                Session.set('selectedProject', projectId);
-            });
+    Meteor.subscribe("singleSprint", sprintId, () => {
+        const projectId = Sprints.findOne().projectId;
+        Meteor.subscribe("projects", projectId, () => {
+            Session.set('selectedProject', projectId);
         });
-    }
+    });
     Session.set('selectedSprint', sprintId);
     this.render('availabilities');
 }, { name: 'availabilities' });
