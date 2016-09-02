@@ -8,6 +8,16 @@
 
 <template name="layout">
 	<div class="container-fluid">
+		{{#if currentUser}}
+		<div class="row">
+			<div class="col-sm-12 col-md-12">
+				<button class="btn btn-default btn-logout btn-xs pull-right" title="Abmelden">Abmelden</button>
+				<p class="text-muted small">
+					Herzlich willkommen {{currentUser.profile.name}}!
+				</p>
+			</div>
+		</div>
+		{{/if}}
 		<div class="row">
 			<div class="col-sm-12 col-md-12">
 				{{> yield}}

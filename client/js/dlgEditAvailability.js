@@ -34,6 +34,6 @@ Template.dlgEditAvailability.events({
     }
 });
 
-$(document).on('shown.bs.modal', '#dlgEditAvailability', function () {
+$(document).on('shown.bs.modal', '#dlgEditAvailability', () => {
     $('#developerNameInput').focus();
 });

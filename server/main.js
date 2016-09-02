@@ -4,12 +4,19 @@ Meteor.startup(() => {
   // code to run on server at startup
 });
 
-Meteor.publish("projects", function () {
-  return Projects.find({}); //, {fields: {secretInfo: 0}});
+Meteor.publish("projects", function (projectId) {
+  if (projectId) {
+    return Projects.find({ _id: projectId});
+  }
+  return Projects.find({ owner: this.userId }); //, {fields: {secretInfo: 0}});
 });
 
 Meteor.publish("sprints", function (projectId) {
   return Sprints.find({projectId}); //, {fields: {secretInfo: 0}});
+});
+
+Meteor.publish("singleSprint", function (sprintId) {
+  return Sprints.find({ _id: sprintId }); //, {fields: {secretInfo: 0}});
 });
 
 Meteor.publish("availabilities", function (projectId) {

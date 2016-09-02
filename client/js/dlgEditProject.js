@@ -16,9 +16,9 @@ Template.dlgEditProject.events({
     'click .btnSaveProject'(event, instance) {
         const name = $('#projectNameInput').val();
         if (this._id) {
-            Projects.update({ _id: this._id }, { $set: { name: name } });
+            Meteor.call('updateProject', this._id, name);
         } else {
-            Projects.insert({ name: name });
+            Projects.insert({ name: name, owner: Meteor.userId() });
         }
         $('#dlgEditProject').modal('hide');
     },
@@ -30,6 +30,6 @@ Template.dlgEditProject.events({
     }
 });
 
-$(document).on('shown.bs.modal', '#dlgEditProject', function () {
+$(document).on('shown.bs.modal', '#dlgEditProject', () => {
     $('#projectNameInput').focus();
 });

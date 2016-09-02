@@ -25,9 +25,11 @@
 								</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-danger btnDelete pull-left">Löschen</button>
-							<button type="button" class="btn btn-primary btnSaveSprint">Erfassen</button>
-							<button type="button" data-dismiss="modal" class="btn btn-default btnCancel">Verwerfen</button>
+							{{#if currentUser}}
+								<button type="button" class="btn btn-danger btnDelete pull-left">Löschen</button>
+							{{/if}}
+							<button type="button" class="btn btn-primary btnSaveSprint">Speichern</button>
+							<button type="button" data-dismiss="modal" class="btn btn-default btnCancel">Abbrechen</button>
 						</div>
           {{/with}}
 			</div><!-- /.modal-content -->

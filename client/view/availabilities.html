@@ -1,5 +1,10 @@
 <template name="availabilities">
-	<div class="breadcrumb"><a href="{{urlFor route='projects'}}">Projekte</a> &raquo; <a href="{{urlFor route='sprints' projectId=selectedProject._id}}">{{selectedProject.name}}</a> &raquo; {{selectedSprint.name}}</div>
+	<div class="breadcrumb">
+		{{#if currentUser}}
+		<a href="{{urlFor route='projects'}}">Projekte</a> &raquo;
+		{{/if}}
+		<a href="{{urlFor route='sprints' projectId=selectedProject._id}}">{{selectedProject.name}}</a> &raquo; {{selectedSprint.name}}
+	</div>
 	<div class="table-striped">
 		{{#if availabilitiesLoading}}
 			Laden...
