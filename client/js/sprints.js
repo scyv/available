@@ -40,7 +40,7 @@ Template.sprints.helpers({
     velocity() {
         const availabilities = sumAvailabilities(this._id);
         if (availabilities > 0) {
-            return (this.burnedSPs / availabilities).toFixed(2);
+            return (this.burnedSPs * 8 / availabilities).toFixed(2);
         }
         return (0.00).toFixed(2);
     }
