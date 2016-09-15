@@ -20,6 +20,12 @@ Template.sprints.helpers({
     availabilities() {
         return sumAvailabilities(this._id);
     },
+    noSps() {
+        if (this.burnedSPs > 0) {
+            return "";
+        }
+        return "noSps";
+    },
     possibleSps() {
         let sumVelocity = 0;
         let count = 0;
