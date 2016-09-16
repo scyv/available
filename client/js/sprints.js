@@ -31,7 +31,7 @@ Template.sprints.helpers({
         let count = 0;
         Sprints.find({ stop: { $lt: this.start } }).forEach((sprint) => {
             const availabilities = sumAvailabilities(sprint._id);
-            if (availabilities > 0) {
+            if (availabilities > 0 && sprint.burnedSPs > 0) {
                 sumVelocity += sprint.burnedSPs / availabilities * 8;
                 count++;
             }
