@@ -16,9 +16,19 @@
 						<input type="text" class="form-control developerNameInput" placeholder="Entwicklername" value="{{name}}" id="developerNameInput">
 					</div>
 					<div class="form-group">
-						<label for="availabilityInput">Verfügbarkeit</label>
-						<input type="text" class="form-control availabilityInput" placeholder="Entwicklername" value="{{availability}}" id="availabilityInput">
+						<label for="availabilityInput">Verfügbarkeit in</label>
+
+						<label class="radio-inline">
+							<input type="radio" name="availabilityBase" id="availabilityBaseHours" value="hours" checked> Stunden
+						</label>
+						<label class="radio-inline">
+							<input type="radio" name="availabilityBase" id="availabilityBaseDays" value="days"> Tagen ({{hoursPerDay}}h pro Tag)
+						</label>
+						<input type="text" class="form-control availabilityInput" placeholder="Verfügbarkeit" value="{{availability}}" id="availabilityInput">
 					</div>
+					<p>
+						Der Sprint "{{sprintName}}" geht vom {{formattedDate sprintStart}} bis zum {{formattedDate sprintEnd}}.
+					</p>
 			</div>
 			<div class="modal-footer">
 				{{#if currentUser}}

@@ -11,10 +11,14 @@
 						</div>
 						<div class="modal-body">
 							<h2>Projekt bearbeiten</h2>
-								<div class="form-group">
-									<label for="projectNameInput">Name</label>
-									<input type="text" class="form-control projectNameInput" placeholder="Projektname" value="{{name}}" id="projectNameInput">
-								</div>
+							<div class="form-group">
+								<label for="projectNameInput">Name</label>
+								<input type="text" class="form-control projectNameInput" placeholder="Projektname" value="{{name}}" id="projectNameInput">
+							</div>
+							<div class="form-group">
+								<label for="hoursPerDayInput">Stunden pro Arbeitstag</label>
+								<input type="text" class="form-control hoursPerDayInput" placeholder="Stunden pro Arbeitstag" value="{{hoursPerDay}}" id="hoursPerDayInput">
+							</div>
 						</div>
 						<div class="modal-footer">
 							{{#if currentUser}}

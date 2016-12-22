@@ -4,21 +4,21 @@ import { Meteor } from 'meteor/meteor'
 Template.dlgEditProject.helpers({
     project() {
         let selectedProject = Session.get('selectedProject');
-        let project = undefined;
         if (selectedProject) {
             return Projects.findOne({ _id: selectedProject });
         }
-        return {};
+        return {name: undefined, hoursPerDay: 8};
     }
 });
 
 Template.dlgEditProject.events({
     'click .btnSaveProject'(event, instance) {
         const name = $('#projectNameInput').val();
+        const hoursPerDay = parseInt($('#hoursPerDayInput').val());
         if (this._id) {
             Meteor.call('updateProject', this._id, name);
         } else {
-            Projects.insert({ name: name, owner: Meteor.userId() });
+            Projects.insert({ name: name, hoursPerDay: hoursPerDay, owner: Meteor.userId() });
         }
         $('#dlgEditProject').modal('hide');
     },
