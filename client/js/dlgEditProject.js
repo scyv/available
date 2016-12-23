@@ -16,7 +16,7 @@ Template.dlgEditProject.events({
         const name = $('#projectNameInput').val();
         const hoursPerDay = parseInt($('#hoursPerDayInput').val());
         if (this._id) {
-            Meteor.call('updateProject', this._id, name);
+            Meteor.call('updateProject', this._id, name, hoursPerDay);
         } else {
             Projects.insert({ name: name, hoursPerDay: hoursPerDay, owner: Meteor.userId() });
         }

@@ -1,11 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 
 Meteor.methods({
-    'updateProject'(projectId, name) {
-        const project = Projects.findOne({ _id: projectId, owner: this.userId });
-        if (project) {
-            Projects.update({ _id: this._id, owner: this.userId }, { $set: { name: name } });
-        }
+    'updateProject'(projectId, name, hoursPerDay) {
+        Projects.update({ _id: projectId, owner: this.userId }, { $set: { name: name, hoursPerDay: hoursPerDay } });
     },
     'removeProject'(projectId) {
         const project = Projects.findOne({ _id: projectId, owner: this.userId });
