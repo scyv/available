@@ -40,8 +40,10 @@ Template.dlgEditAvailability.events({
         let availability = parseFloat($('#availabilityInput').val());
 
         if ($('#availabilityBaseDays').prop("checked")) {
-            availability = availability / Projects.findOne({ _id: projectId }).hoursPerDay;
+            availability = availability * Projects.findOne({ _id: projectId }).hoursPerDay;
         }
+        
+        $('#availabilityBaseHours').prop("checked", true);
 
         const obj = { name, availability, sprintId, projectId };
         if (this._id) {
