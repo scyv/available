@@ -3,7 +3,7 @@ Template.login.events({
         var email = $('#emailInput').val();
         var password = $('#passwordInput').val();
 
-        Meteor.loginWithPassword(email, password,  (err) => {
+            Meteor.loginWithPassword(email, password,  (err) => {
             if (err) {
                 alert("Fehler: " + err, "ERROR");
             } else {

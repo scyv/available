@@ -12,12 +12,12 @@ Template.projects.helpers({
 });
 
 Template.projects.events({
-    'click .btnCreateProject'(event, instance) {
+    'click .btnCreateProject'() {
         Session.set('selectedProject', undefined);
         $('#dlgEditProject').modal('show');
         return false;
     },
-    'click .btnEditProject'(event, instance) {
+    'click .btnEditProject'() {
         Session.set('selectedProject', this._id);
         $('#dlgEditProject').modal('show');
         return false;
@@ -27,6 +27,6 @@ Template.projects.events({
         return false;
     },
     'click tr.projectRow'() {
-        Router.go('sprints', { projectId: this._id });        
+        Router.go('sprints', { projectId: this._id });
     }
 });

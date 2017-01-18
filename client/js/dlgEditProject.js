@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor'
 
 Template.dlgEditProject.helpers({
     project() {
-        let selectedProject = Session.get('selectedProject');
+        const selectedProject = Session.get('selectedProject');
         if (selectedProject) {
             return Projects.findOne({ _id: selectedProject });
         }
@@ -12,7 +12,7 @@ Template.dlgEditProject.helpers({
 });
 
 Template.dlgEditProject.events({
-    'click .btnSaveProject'(event, instance) {
+    'click .btnSaveProject'() {
         const name = $('#projectNameInput').val();
         const hoursPerDay = parseInt($('#hoursPerDayInput').val());
         if (this._id) {

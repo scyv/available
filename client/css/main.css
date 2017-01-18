@@ -3,6 +3,10 @@ body {
     padding-top: 10px;
 }
 
+footer {
+    text-align: center;
+}
+
 .breadcrumb {
     margin-top: 0;
     margin-bottom: 10px;

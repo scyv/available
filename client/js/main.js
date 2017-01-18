@@ -4,7 +4,7 @@ import { Template } from 'meteor/templating';
 
 export let projectsHandle;
 export let sprintsHandle;
-export let availabilitiesHandle; 
+export let availabilitiesHandle;
 
 UI.registerHelper('formattedDate', (date) => {
     if (!date) {
@@ -17,7 +17,7 @@ Template.layout.events({
     'click .btn-logout'() {
         Meteor.logout();
     }
-}),
+});
 
 Meteor.startup(() => {
     moment.locale('de');

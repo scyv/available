@@ -2,7 +2,7 @@ import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor'
 
 const getSelectedSprint = () => {
-    let selectedSprintId = Session.get('selectedSprint');
+    const selectedSprintId = Session.get('selectedSprint');
     let sprint = undefined;
     if (selectedSprintId) {
         sprint = Sprints.findOne({ _id: selectedSprintId });
@@ -12,7 +12,7 @@ const getSelectedSprint = () => {
 
 Template.dlgEditSprint.helpers({
     sprint() {
-        let sprint = getSelectedSprint();
+        const sprint = getSelectedSprint();
         if (sprint) {
             return sprint;
         }
@@ -21,7 +21,7 @@ Template.dlgEditSprint.helpers({
 });
 
 Template.dlgEditSprint.events({
-    'click .btnSaveSprint'(event, instance) {
+    'click .btnSaveSprint'() {
         const dateRange = $('#dateRangeInput').data('daterangepicker');
         const name = $('#sprintNameInput').val();
         const start = (dateRange.startDate).format();

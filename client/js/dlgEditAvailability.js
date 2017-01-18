@@ -3,7 +3,7 @@ import { Template } from 'meteor/templating';
 
 Template.dlgEditAvailability.helpers({
     availabilityEntity() {
-        let selectedAvailability = Session.get('selectedAvailability');
+        const selectedAvailability = Session.get('selectedAvailability');
         let availability = {availability:0};
         if (selectedAvailability) {
             availability = Availabilities.findOne({ _id: selectedAvailability });
@@ -24,15 +24,16 @@ Template.dlgEditAvailability.helpers({
 Template.dlgEditAvailability.events({
     'change #availabilityBaseHours, change #availabilityBaseDays'() {
         const projectId = Session.get('selectedProject');
-        const availability = parseFloat($('#availabilityInput').val());
+        const inputField = $('#availabilityInput');
+        const availability = parseFloat(inputField.val());
         const hoursPerDay = Projects.findOne({ _id: projectId }).hoursPerDay;
         if ($('#availabilityBaseHours').prop("checked")) {
-            $('#availabilityInput').val((availability * hoursPerDay).toFixed(0));
+            inputField.val((availability * hoursPerDay).toFixed(0));
         } else {
-            $('#availabilityInput').val((availability / hoursPerDay).toFixed(0));
+            inputField.val((availability / hoursPerDay).toFixed(0));
         }
     },
-    'click .btnSaveAvailability'(event, instance) {
+    'click .btnSaveAvailability'() {
         const sprintId = Session.get('selectedSprint');
         const projectId = Session.get('selectedProject');
 
@@ -42,7 +43,7 @@ Template.dlgEditAvailability.events({
         if ($('#availabilityBaseDays').prop("checked")) {
             availability = availability * Projects.findOne({ _id: projectId }).hoursPerDay;
         }
-        
+
         $('#availabilityBaseHours').prop("checked", true);
 
         const obj = { name, availability, sprintId, projectId };

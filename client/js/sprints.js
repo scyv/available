@@ -5,7 +5,7 @@ const sumAvailabilities = (sprintId) => {
     return Availabilities.find({ sprintId })
         .fetch()
         .reduce((pre, av) => (Math.abs(pre) + Math.abs(av.availability)), 0);
-}
+};
 
 Template.sprints.helpers({
     selectedProject() {
@@ -54,12 +54,12 @@ Template.sprints.helpers({
 });
 
 Template.sprints.events({
-    'click .btnCreateSprint'(event, instance) {
+    'click .btnCreateSprint'() {
         Session.set('selectedSprint', undefined);
         $('#dlgEditSprint').modal('show');
         return false;
     },
-    'click .btnEditSprint'(event, instance) {
+    'click .btnEditSprint'() {
         Session.set('selectedSprint', this._id);
         $('#dlgEditSprint').modal('show');
         return false;
