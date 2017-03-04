@@ -21,8 +21,13 @@ td.center, th.center {
     text-align: center;
 }
 
-tr.sprintRow, tr.projectRow {
+tr.projectRow {
     cursor: pointer;
+}
+
+tr.sprintRow label, tr.sprintRow label input {
+    cursor: pointer;
+    font-weight: normal;
 }
 
 .noSps {

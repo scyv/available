@@ -30,13 +30,23 @@
                     </tr>
 					{{#each sprints}}
 						<tr class="sprintRow">
-							<td>{{name}}</td>
+							<td>
+                                <label>
+                                    <input type="radio" name="selectedSprint" class="selectSprint" checked="{{isSprintSelected}}"
+                                            title="Klicken für Berechnung von möglichen Storypoints"/> {{name}}
+                                </label>
+                            </td>
 							<td>{{formattedDate start}}</td>
 							<td>{{formattedDate stop}}</td>
 							<td class="center">{{availabilities}}</td>
 							<td class="center">{{possibleSps}}</td>
 							<td class="center {{noSps}}">{{burnedSPs}}</td>
-							<td class="center">{{velocity}}</td>
+							<td class="center">
+                                <label>
+                                    <input type="checkbox" class="checkForVelocity" title="Diesen Sprint in die Berechnung der möglichen Storypoints einbeziehen"
+                                           checked="{{useForVelocityCalculation}}" /> {{velocity}}
+                                </label>
+                            </td>
 							<td>
 								<button class="btn btn-default btn-xs pull-right btnOpenAvailabilities">Verfügbarkeiten</button>
 								<button class="btn btn-default btn-xs pull-right btnEditSprint">Bearbeiten</button>
