@@ -12,11 +12,7 @@ Template.sprints.helpers({
         return Projects.findOne(Session.get('selectedProject'));
     },
     sprintsLoading() {
-        const sprintsLoading = !sprintsHandle.ready();
-        if (!sprintsLoading && !Session.get("selectedSprint")) {
-            Session.set("selectedSprint", Sprints.findOne({}, {sort: {stop: -1}})._id);
-        }
-        return sprintsLoading;
+        return !sprintsHandle.ready();
     },
     isSprintSelected() {
         return Session.get("selectedSprint") === this._id;
