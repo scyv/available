@@ -15,7 +15,14 @@ Template.sprints.helpers({
         return !sprintsHandle.ready();
     },
     isSprintSelected() {
-        return Session.get("selectedSprint") === this._id;
+        const isSelected = Session.get("selectedSprint") === this._id;
+        const rowElement = $(".sprint-" + this._id);
+        if (isSelected) {
+            rowElement.addClass("selected");
+        } else {
+            rowElement.removeClass("selected");
+        }
+        return isSelected;
     },
     sprints() {
         return Sprints.find({}, {sort: {stop: -1}});
@@ -63,7 +70,8 @@ Template.sprints.helpers({
             Session.set("velocityWindow-" + this._id, collectedSprints);
         }
         const averageVelocity = sumVelocity / count;
-        return (averageVelocity * sumAvailabilities(this._id) / project.hoursPerDay).toFixed(2);
+        const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
+        return ((averageVelocity * sumAvailabilities(this._id) / project.hoursPerDay).toFixed(2)) + velocity;
     },
     velocity() {
         const availabilities = sumAvailabilities(this._id);
@@ -74,9 +82,34 @@ Template.sprints.helpers({
     },
     useForVelocityCalculation() {
         let velocityWindow = Session.get("velocityWindow-" + Session.get("selectedSprint"));
-        if (!velocityWindow) return false;
-        return velocityWindow.indexOf(this._id) >= 0;
+        let isUsedForCalculation = false;
+        if (velocityWindow) {
+            isUsedForCalculation = velocityWindow.indexOf(this._id) >= 0;
+        } else {
+            isUsedForCalculation = false;
+        }
+
+        const rowElement = $(".sprint-" + this._id);
+        if (isUsedForCalculation) {
+            rowElement.addClass("for-calculation");
+        } else {
+            rowElement.removeClass("for-calculation");
+        }
+
+        return isUsedForCalculation;
     }
+});
+
+Template.sprints.onRendered(() => {
+    window.setTimeout(()=> {
+        const selectedSprintElement = $(".sprint-" + Session.get('selectedSprint'));
+        selectedSprintElement.addClass("selected");
+        const velocityWindow = Session.get("velocityWindow-" + Session.get("selectedSprint"));
+        _.each(velocityWindow, (id) => {
+            const rowElement = $(".sprint-" + id);
+            rowElement.addClass("for-calculation");
+        });
+    }, 100);
 });
 
 Template.sprints.events({
@@ -99,7 +132,7 @@ Template.sprints.events({
     },
     'change .checkForVelocity'(evt) {
         let velocityWindow = Session.get("velocityWindow-" + Session.get("selectedSprint"));
-        if(evt.target.checked) {
+        if (evt.target.checked) {
             velocityWindow.push(this._id);
         } else {
             velocityWindow = _.without(velocityWindow, this._id);

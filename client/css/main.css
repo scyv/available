@@ -30,6 +30,14 @@ tr.sprintRow label, tr.sprintRow label input {
     font-weight: normal;
 }
 
+.table-striped tr.sprintRow.selected {
+    background: #ffd6c6;
+}
+
+.table-striped tr.sprintRow.for-calculation {
+    background: #fffcc8;
+}
+
 .noSps {
     color: red;
 }
