@@ -18,7 +18,7 @@ Router.route('/login', function () {
 }, { name: 'login' });
 
 Router.route('/project/:projectId', function () {
-    const projectId = this.paramsk.projectId;
+    const projectId = this.params.projectId;
     Meteor.subscribe("projects", projectId, () => {
         Session.set(SessionProps.SELECTED_PROJECT, projectId);
     });
