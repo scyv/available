@@ -1,7 +1,8 @@
 import { Meteor } from 'meteor/meteor'
+import { SessionProps} from "./sessionProperties"
 
 Router.configure({
-    layoutTemplate: 'layout',
+    layoutTemplate: 'layout'
 });
 
 Router.route('/', function () {
@@ -17,9 +18,10 @@ Router.route('/login', function () {
 }, { name: 'login' });
 
 Router.route('/project/:projectId', function () {
-    const projectId = this.params.projectId;
-    Meteor.subscribe("projects", projectId);
-    Session.set('selectedProject', projectId);
+    const projectId = this.paramsk.projectId;
+    Meteor.subscribe("projects", projectId, () => {
+        Session.set(SessionProps.SELECTED_PROJECT, projectId);
+    });
     this.render('sprints');
 }, { name: 'sprints' });
 
@@ -28,9 +30,9 @@ Router.route('/sprint/:sprintId', function () {
     Meteor.subscribe("singleSprint", sprintId, () => {
         const projectId = Sprints.findOne().projectId;
         Meteor.subscribe("projects", projectId, () => {
-            Session.set('selectedProject', projectId);
+            Session.set(SessionProps.SELECTED_PROJECT, projectId);
         });
     });
-    Session.set('selectedSprint', sprintId);
+    Session.set(SessionProps.SELECTED_SPRINT, sprintId);
     this.render('availabilities');
 }, { name: 'availabilities' });

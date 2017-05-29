@@ -1,5 +1,6 @@
-import { Template } from 'meteor/templating';
-import {sprintsHandle} from './main';
+import { Template } from "meteor/templating";
+import {sprintsHandle} from "./main";
+import { SessionProps} from "./sessionProperties"
 
 const sumAvailabilities = (sprintId) => {
     return Availabilities.find({sprintId})
@@ -9,13 +10,13 @@ const sumAvailabilities = (sprintId) => {
 
 Template.sprints.helpers({
     selectedProject() {
-        return Projects.findOne(Session.get('selectedProject'));
+        return Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
     },
     sprintsLoading() {
         return !sprintsHandle.ready();
     },
     isSprintSelected() {
-        const isSelected = Session.get("selectedSprint") === this._id;
+        const isSelected = Session.get(SessionProps.SELECTED_SPRINT) === this._id;
         const rowElement = $(".sprint-" + this._id);
         if (isSelected) {
             rowElement.addClass("selected");
@@ -39,10 +40,10 @@ Template.sprints.helpers({
     possibleSps() {
         let sumVelocity = 0;
         let count = 0;
-        let velocityWindow = Session.get("velocityWindow-" + this._id);
+        let velocityWindow = Session.get(SessionProps.VELOCITY_WINDOW + this._id);
         let collectedSprints = [];
         let velocityWindowIndex = 3;
-        const project = Projects.findOne(Session.get("selectedProject"));
+        const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
         Sprints.find({stop: {$lt: this.start}}, {sort: {start: -1}}).forEach((sprint) => {
             if (sprint.burnedSPs > 0) {
                 if (velocityWindow) {
@@ -67,7 +68,7 @@ Template.sprints.helpers({
             count = 1;
         }
         if (!velocityWindow) {
-            Session.set("velocityWindow-" + this._id, collectedSprints);
+            Session.set(SessionProps.VCLOCITY_WINDOW + this._id, collectedSprints);
         }
         const averageVelocity = sumVelocity / count;
         const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
@@ -81,7 +82,8 @@ Template.sprints.helpers({
         return (0).toFixed(2);
     },
     useForVelocityCalculation() {
-        let velocityWindow = Session.get("velocityWindow-" + Session.get("selectedSprint"));
+        let velocityWindow = Session.get(SessionProps.VELOCITY_WINDOW
+            + Session.get(SessionProps.SELECTED_SPRINT));
         let isUsedForCalculation = false;
         if (velocityWindow) {
             isUsedForCalculation = velocityWindow.indexOf(this._id) >= 0;
@@ -102,9 +104,10 @@ Template.sprints.helpers({
 
 Template.sprints.onRendered(() => {
     window.setTimeout(()=> {
-        const selectedSprintElement = $(".sprint-" + Session.get('selectedSprint'));
+        const selectedSprint = Session.get(SessionProps.SELECTED_SPRINT);
+        const selectedSprintElement = $(".sprint-" + selectedSprint);
         selectedSprintElement.addClass("selected");
-        const velocityWindow = Session.get("velocityWindow-" + Session.get("selectedSprint"));
+        const velocityWindow = Session.get(SessionProps.SELECTED_SPRINT + selectedSprint);
         _.each(velocityWindow, (id) => {
             const rowElement = $(".sprint-" + id);
             rowElement.addClass("for-calculation");
@@ -113,30 +116,31 @@ Template.sprints.onRendered(() => {
 });
 
 Template.sprints.events({
-    'click .btnCreateSprint'() {
-        Session.set('selectedSprint', undefined);
-        $('#dlgEditSprint').modal('show');
+    "click .btnCreateSprint"() {
+        Session.set(SessionProps.SELECTED_SPRINT, undefined);
+        $("#dlgEditSprint").modal("show");
         return false;
     },
-    'click .btnEditSprint'() {
-        Session.set('selectedSprint', this._id);
-        $('#dlgEditSprint').modal('show');
+    "click .btnEditSprint"() {
+        Session.set(SessionProps.SELECTED_SPRINT, this._id);
+        $("#dlgEditSprint").modal("show");
         return false;
     },
-    'click .btnOpenAvailabilities'() {
-        Router.go('availabilities', {sprintId: this._id});
+    "click .btnOpenAvailabilities"() {
+        Router.go("availabilities", {sprintId: this._id});
         return false;
     },
-    'change .selectSprint'() {
-        Session.set("selectedSprint", this._id);
+    "change .selectSprint"() {
+        Session.set(SessionProps.SELECTED_SPRINT, this._id);
     },
-    'change .checkForVelocity'(evt) {
-        let velocityWindow = Session.get("velocityWindow-" + Session.get("selectedSprint"));
+    "change .checkForVelocity"(evt) {
+        const selectedSprint = Session.get(SessionProps.SELECTED_SPRINT);
+        let velocityWindow = Session.get(SessionProps.VELOCITY_WINDOW + selectedSprint);
         if (evt.target.checked) {
             velocityWindow.push(this._id);
         } else {
             velocityWindow = _.without(velocityWindow, this._id);
         }
-        Session.set("velocityWindow-" + Session.get("selectedSprint"), velocityWindow);
+        Session.set(SessionProps.VELOCITY_WINDOW + selectedSprint, velocityWindow);
     }
 });

@@ -1,9 +1,10 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor'
+import { SessionProps} from "./sessionProperties"
 
 Template.dlgEditProject.helpers({
     project() {
-        const selectedProject = Session.get('selectedProject');
+        const selectedProject = Session.get(SessionProps.SELECTED_PROJECT);
         if (selectedProject) {
             return Projects.findOne({ _id: selectedProject });
         }

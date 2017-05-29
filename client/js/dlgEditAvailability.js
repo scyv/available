@@ -1,9 +1,10 @@
 import { Meteor } from 'meteor/meteor'
 import { Template } from 'meteor/templating';
+import { SessionProps} from "./sessionProperties"
 
 Template.dlgEditAvailability.helpers({
     availabilityEntity() {
-        const selectedAvailability = Session.get('selectedAvailability');
+        const selectedAvailability = Session.get(SessionProps.SELECTED_AVAILABILITY);
         let availability = {availability:0};
         if (selectedAvailability) {
             availability = Availabilities.findOne({ _id: selectedAvailability });

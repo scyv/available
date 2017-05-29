@@ -1,8 +1,9 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor'
+import { SessionProps} from "./sessionProperties"
 
 const getSelectedSprint = () => {
-    const selectedSprintId = Session.get('selectedSprint');
+    const selectedSprintId = Session.get(SessionProps.SELECTED_SPRINT);
     let sprint = undefined;
     if (selectedSprintId) {
         sprint = Sprints.findOne({ _id: selectedSprintId });

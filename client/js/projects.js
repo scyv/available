@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import {projectsHandle} from './main';
+import { SessionProps} from "./sessionProperties"
 
 
 Template.projects.helpers({
@@ -13,12 +14,12 @@ Template.projects.helpers({
 
 Template.projects.events({
     'click .btnCreateProject'() {
-        Session.set('selectedProject', undefined);
+        Session.set(SessionProps.SELECTED_PROJECT, undefined);
         $('#dlgEditProject').modal('show');
         return false;
     },
     'click .btnEditProject'() {
-        Session.set('selectedProject', this._id);
+        Session.set(SessionProps.SELECTED_PROJECT, this._id);
         $('#dlgEditProject').modal('show');
         return false;
     },
