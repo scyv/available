@@ -4,6 +4,7 @@ import { SessionProps} from "./sessionProperties"
 
 Template.dlgEditAvailability.helpers({
     availabilityEntity() {
+        $('#availabilityBaseHours').prop("checked", true);
         const selectedAvailability = Session.get(SessionProps.SELECTED_AVAILABILITY);
         let availability = {availability:0};
         if (selectedAvailability) {
@@ -27,11 +28,14 @@ Template.dlgEditAvailability.events({
         const projectId = Session.get('selectedProject');
         const inputField = $('#availabilityInput');
         const availability = parseFloat(inputField.val());
-        const hoursPerDay = Projects.findOne({ _id: projectId }).hoursPerDay;
-        if ($('#availabilityBaseHours').prop("checked")) {
-            inputField.val((availability * hoursPerDay).toFixed(0));
-        } else {
-            inputField.val((availability / hoursPerDay).toFixed(0));
+        const project = Projects.findOne({ _id: projectId });
+        if (project) {
+            const hoursPerDay = project.hoursPerDay;
+            if ($('#availabilityBaseHours').prop("checked")) {
+                inputField.val((availability * hoursPerDay).toFixed(0));
+            } else {
+                inputField.val((availability / hoursPerDay).toFixed(0));
+            }
         }
     },
     'click .btnSaveAvailability'() {

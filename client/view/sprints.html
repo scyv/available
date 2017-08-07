@@ -31,8 +31,8 @@
 					{{#each sprints}}
 						<tr class="sprintRow sprint-{{_id}}">
 							<td>
-                                <label>
-                                    <input type="radio" name="selectedSprint" class="selectSprint" checked="{{isSprintSelected}}"
+                                <label for="selectedSprint-{{_id}}">
+                                    <input type="radio" id="selectedSprint-{{_id}}" name="selectedSprint" class="selectSprint" checked="{{isSprintSelected}}"
                                             title="Klicken für Berechnung von möglichen Storypoints"/> {{name}}
                                 </label>
                             </td>

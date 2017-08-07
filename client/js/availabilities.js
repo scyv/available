@@ -15,6 +15,17 @@ Template.availabilities.helpers({
     },
     availabilities() {
         return Availabilities.find({sprintId: Session.get(SessionProps.SELECTED_SPRINT)});
+    },
+    sprintVelocity() {
+      return Session.get(SessionProps.SPRINT_VELOCITY +
+          Session.get(SessionProps.SELECTED_SPRINT)).toFixed(2);
+    },
+    possibleSP() {
+        const sprintVelocity = Session.get(SessionProps.SPRINT_VELOCITY +
+            Session.get(SessionProps.SELECTED_SPRINT));
+        const selectedProject= Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
+
+        return ((this.availability / selectedProject.hoursPerDay) * sprintVelocity).toFixed(2);
     }
 });
 

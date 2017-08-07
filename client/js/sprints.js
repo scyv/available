@@ -68,10 +68,11 @@ Template.sprints.helpers({
             count = 1;
         }
         if (!velocityWindow) {
-            Session.set(SessionProps.VCLOCITY_WINDOW + this._id, collectedSprints);
+            Session.set(SessionProps.VELOCITY_WINDOW + this._id, collectedSprints);
         }
         const averageVelocity = sumVelocity / count;
         const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
+        Session.set(SessionProps.SPRINT_VELOCITY + this._id, averageVelocity);
         return ((averageVelocity * sumAvailabilities(this._id) / project.hoursPerDay).toFixed(2)) + velocity;
     },
     velocity() {
