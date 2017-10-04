@@ -14,7 +14,9 @@
 					<tr>
 						<th>Teammitglied</th>
 						<th class="center">Verfügbarkeit (h)</th>
-                        <th class="center">Mögliche SP (V: {{sprintVelocity}})</th>
+                        {{#if sprintVelocityDataAvailable}}
+                            <th class="center">Mögliche SP (V: {{sprintVelocity}})</th>
+                        {{/if}}
 						<th></th>
 					</tr>
 				</thead>
@@ -28,8 +30,10 @@
 						<tr>
 							<td>{{name}}</td>
 							<td class="center">{{availability}}</td>
-                            <td class="center">{{possibleSP}}</td>
-							<td>
+                            {{#if sprintVelocityDataAvailable}}
+                                <td class="center">{{possibleSP}}</td>
+                            {{/if}}
+                            <td>
 								<button class="btn btn-default btn-xs pull-right btnEditAvailability">Bearbeiten</button>
 							</td>
 						</tr>

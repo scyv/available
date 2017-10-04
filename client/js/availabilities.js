@@ -3,12 +3,20 @@ import {availabilitiesHandle} from './main';
 import { SessionProps} from "./sessionProperties"
 
 
+function getSelectedSprint() {
+    return Sprints.findOne(Session.get(SessionProps.SELECTED_SPRINT));
+}
+
+function getSprintVelocity() {
+    getSelectedSprint().averageVelocity.toFixed(2);
+}
+
 Template.availabilities.helpers({
     selectedProject() {
         return Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
     },
     selectedSprint() {
-        return Sprints.findOne(Session.get(SessionProps.SELECTED_SPRINT));
+        return getSelectedSprint();
     },
     availabilitiesLoading() {
         return !availabilitiesHandle.ready();
@@ -16,14 +24,15 @@ Template.availabilities.helpers({
     availabilities() {
         return Availabilities.find({sprintId: Session.get(SessionProps.SELECTED_SPRINT)});
     },
+    sprintVelocityDataAvailable() {
+        return getSprintVelocity() !== undefined;
+    },
     sprintVelocity() {
-      return Session.get(SessionProps.SPRINT_VELOCITY +
-          Session.get(SessionProps.SELECTED_SPRINT)).toFixed(2);
+        return getSprintVelocity();
     },
     possibleSP() {
-        const sprintVelocity = Session.get(SessionProps.SPRINT_VELOCITY +
-            Session.get(SessionProps.SELECTED_SPRINT));
-        const selectedProject= Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
+        const sprintVelocity = getSprintVelocity();
+        const selectedProject = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
 
         return ((this.availability / selectedProject.hoursPerDay) * sprintVelocity).toFixed(2);
     }

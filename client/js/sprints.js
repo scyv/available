@@ -2,11 +2,63 @@ import { Template } from "meteor/templating";
 import {sprintsHandle} from "./main";
 import { SessionProps} from "./sessionProperties"
 
-const sumAvailabilities = (sprintId) => {
+function sumAvailabilities(sprintId) {
     return Availabilities.find({sprintId})
         .fetch()
         .reduce((pre, av) => (Math.abs(pre) + Math.abs(av.availability)), 0);
-};
+}
+
+function getVelocityWindow() {
+    const selectedSprint = Sprints.findOne(Session.get(SessionProps.SELECTED_SPRINT));
+    if (selectedSprint) {
+        return selectedSprint.velocityWindow;
+    }
+    return undefined;
+}
+
+class StoryPointCalculator {
+
+    calculate(sprint) {
+        let sumVelocity = 0;
+        let count = 0;
+        let velocityWindow = sprint.velocityWindow;
+        let collectedSprints = [];
+        let velocityWindowIndex = 3;
+        const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
+        Sprints.find({stop: {$lt: sprint.start}}, {sort: {start: -1}}).forEach((otherSprint) => {
+            if (otherSprint.burnedSPs > 0) {
+                if (velocityWindow) {
+                    if (velocityWindow.indexOf(otherSprint._id) < 0) {
+                        return;
+                    }
+                } else {
+                    if (velocityWindowIndex-- <= 0) {
+                        return;
+                    }
+                    collectedSprints.push(otherSprint._id);
+                }
+                const availabilities = sumAvailabilities(otherSprint._id);
+                if (availabilities > 0) {
+                    sumVelocity += otherSprint.burnedSPs / availabilities * project.hoursPerDay;
+                    count++;
+                }
+            }
+        });
+        if (count == 0) {
+            sumVelocity = 1;
+            count = 1;
+        }
+        const averageVelocity = sumVelocity / count;
+
+        if (!velocityWindow) {
+            Sprints.update({_id: sprint._id}, {$set: {velocityWindow: collectedSprints}});
+        }
+        Sprints.update({_id: sprint._id}, {$set: {averageVelocity: averageVelocity}});
+
+        const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
+        return ((averageVelocity * sumAvailabilities(sprint._id) / project.hoursPerDay).toFixed(2)) + velocity;
+    }
+}
 
 Template.sprints.helpers({
     selectedProject() {
@@ -38,42 +90,7 @@ Template.sprints.helpers({
         return "noSps";
     },
     possibleSps() {
-        let sumVelocity = 0;
-        let count = 0;
-        let velocityWindow = Session.get(SessionProps.VELOCITY_WINDOW + this._id);
-        let collectedSprints = [];
-        let velocityWindowIndex = 3;
-        const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
-        Sprints.find({stop: {$lt: this.start}}, {sort: {start: -1}}).forEach((sprint) => {
-            if (sprint.burnedSPs > 0) {
-                if (velocityWindow) {
-                    if (velocityWindow.indexOf(sprint._id) < 0) {
-                        return;
-                    }
-                } else {
-                    if (velocityWindowIndex-- <= 0) {
-                        return;
-                    }
-                    collectedSprints.push(sprint._id);
-                }
-                const availabilities = sumAvailabilities(sprint._id);
-                if (availabilities > 0) {
-                    sumVelocity += sprint.burnedSPs / availabilities * project.hoursPerDay;
-                    count++;
-                }
-            }
-        });
-        if (count == 0) {
-            sumVelocity = 1;
-            count = 1;
-        }
-        if (!velocityWindow) {
-            Session.set(SessionProps.VELOCITY_WINDOW + this._id, collectedSprints);
-        }
-        const averageVelocity = sumVelocity / count;
-        const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
-        Session.set(SessionProps.SPRINT_VELOCITY + this._id, averageVelocity);
-        return ((averageVelocity * sumAvailabilities(this._id) / project.hoursPerDay).toFixed(2)) + velocity;
+        return new StoryPointCalculator().calculate(this);
     },
     velocity() {
         const availabilities = sumAvailabilities(this._id);
@@ -83,9 +100,8 @@ Template.sprints.helpers({
         return (0).toFixed(2);
     },
     useForVelocityCalculation() {
-        let velocityWindow = Session.get(SessionProps.VELOCITY_WINDOW
-            + Session.get(SessionProps.SELECTED_SPRINT));
         let isUsedForCalculation = false;
+        const velocityWindow = getVelocityWindow();
         if (velocityWindow) {
             isUsedForCalculation = velocityWindow.indexOf(this._id) >= 0;
         } else {
@@ -98,21 +114,24 @@ Template.sprints.helpers({
         } else {
             rowElement.removeClass("for-calculation");
         }
-
         return isUsedForCalculation;
     }
 });
 
 Template.sprints.onRendered(() => {
     window.setTimeout(()=> {
-        const selectedSprint = Session.get(SessionProps.SELECTED_SPRINT);
-        const selectedSprintElement = $(".sprint-" + selectedSprint);
-        selectedSprintElement.addClass("selected");
-        const velocityWindow = Session.get(SessionProps.SELECTED_SPRINT + selectedSprint);
-        _.each(velocityWindow, (id) => {
-            const rowElement = $(".sprint-" + id);
-            rowElement.addClass("for-calculation");
-        });
+        const selectedSprintId = Session.get(SessionProps.SELECTED_SPRINT);
+        if (selectedSprintId) {
+            const selectedSprintElement = $(".sprint-" + selectedSprintId);
+            selectedSprintElement.addClass("selected");
+            const velocityWindow = getVelocityWindow();
+            if (velocityWindow) {
+                _.each(velocityWindow, (id) => {
+                    const rowElement = $(".sprint-" + id);
+                    rowElement.addClass("for-calculation");
+                });
+            }
+        }
     }, 100);
 });
 
@@ -135,13 +154,12 @@ Template.sprints.events({
         Session.set(SessionProps.SELECTED_SPRINT, this._id);
     },
     "change .checkForVelocity"(evt) {
-        const selectedSprint = Session.get(SessionProps.SELECTED_SPRINT);
-        let velocityWindow = Session.get(SessionProps.VELOCITY_WINDOW + selectedSprint);
+        let velocityWindow = getVelocityWindow() || [];
         if (evt.target.checked) {
             velocityWindow.push(this._id);
         } else {
             velocityWindow = _.without(velocityWindow, this._id);
         }
-        Session.set(SessionProps.VELOCITY_WINDOW + selectedSprint, velocityWindow);
+        Sprints.update({_id: Session.get(SessionProps.SELECTED_SPRINT)}, {$set: {velocityWindow: velocityWindow}});
     }
 });
