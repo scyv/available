@@ -14,22 +14,26 @@
 					<tr>
 						<th>Teammitglied</th>
 						<th class="center">Verfügbarkeit (h)</th>
-                        <th class="center">Mögliche SP (V: {{sprintVelocity}})</th>
+                        {{#if sprintVelocity}}
+                            <th class="center">Mögliche SP (V: {{sprintVelocity}})</th>
+                        {{/if}}
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
                     <tr>
                         <td colspan="4">
-                                <button class="btn btn-success btnAddAvailability">Verfügbarkeit anlegen</button>
+                            <button class="btn btn-success btnAddAvailability">Verfügbarkeit anlegen</button>
                         </td>
                     </tr>
 					{{#each availabilities}}
 						<tr>
 							<td>{{name}}</td>
 							<td class="center">{{availability}}</td>
-                            <td class="center">{{possibleSP}}</td>
-							<td>
+                            {{#if sprintVelocity}}
+                                <td class="center">{{possibleSP}}</td>
+                            {{/if}}
+                            <td>
 								<button class="btn btn-default btn-xs pull-right btnEditAvailability">Bearbeiten</button>
 							</td>
 						</tr>

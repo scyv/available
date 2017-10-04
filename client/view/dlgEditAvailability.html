@@ -4,40 +4,44 @@
 <div class="modal fade" id="dlgEditAvailability" tabindex="-1" role="dialog" aria-labelledby="dlgEditAvailabilityLabel">
 	<div class="modal-dialog">
 		<div class="modal-content">
-		{{#with availabilityEntity}}
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title" id="dlgEditAvailabilityLabel">Verfügbarkeit bearbeiten</h4>
-			</div>
-			<div class="modal-body">
-				<h2>Verfügbarkeit bearbeiten</h2>
-					<div class="form-group">
-						<label for="developerNameInput">Name</label>
-						<input type="text" class="form-control developerNameInput" placeholder="Entwicklername" value="{{name}}" id="developerNameInput">
-					</div>
-					<div class="form-group">
-						<label for="availabilityInput">Verfügbarkeit in</label>
+        {{#if availabilitiesLoading}}
+            Laden...
+        {{else}}
+            {{#with availabilityEntity}}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dlgEditAvailabilityLabel">Verfügbarkeit bearbeiten</h4>
+                </div>
+                <div class="modal-body">
+                    <h2>Verfügbarkeit bearbeiten</h2>
+                        <div class="form-group">
+                            <label for="developerNameInput">Name</label>
+                            <input type="text" class="form-control developerNameInput" placeholder="Entwicklername" value="{{name}}" id="developerNameInput">
+                        </div>
+                        <div class="form-group">
+                            <label for="availabilityInput">Verfügbarkeit in</label>
 
-						<label class="radio-inline">
-							<input type="radio" name="availabilityBase" id="availabilityBaseHours" value="hours" checked> Stunden
-						</label>
-						<label class="radio-inline">
-							<input type="radio" name="availabilityBase" id="availabilityBaseDays" value="days"> Tagen ({{hoursPerDay}}h pro Tag)
-						</label>
-						<input type="text" class="form-control availabilityInput" placeholder="Verfügbarkeit" value="{{availability}}" id="availabilityInput">
-					</div>
-					<p>
-						Der Sprint "{{sprintName}}" geht vom {{formattedDate sprintStart}} bis zum {{formattedDate sprintEnd}}.
-					</p>
-			</div>
-			<div class="modal-footer">
-				{{#if currentUser}}
-					<button type="button" class="btn btn-danger btnDelete pull-left">Löschen</button>
-				{{/if}}
-				<button type="button" class="btn btn-primary btnSaveAvailability">Speichern</button>
-				<button type="button" data-dismiss="modal" class="btn btn-default btnCancel">Abbrechen</button>
-			</div>
-		{{/with}}
+                            <label class="radio-inline">
+                                <input type="radio" name="availabilityBase" id="availabilityBaseHours" value="hours" checked> Stunden
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="availabilityBase" id="availabilityBaseDays" value="days"> Tagen ({{hoursPerDay}}h pro Tag)
+                            </label>
+                            <input type="text" class="form-control availabilityInput" placeholder="Verfügbarkeit" value="{{availability}}" id="availabilityInput">
+                        </div>
+                        <p>
+                            Der Sprint "{{sprintName}}" geht vom {{formattedDate sprintStart}} bis zum {{formattedDate sprintEnd}}.
+                        </p>
+                </div>
+                <div class="modal-footer">
+                    {{#if currentUser}}
+                        <button type="button" class="btn btn-danger btnDelete pull-left">Löschen</button>
+                    {{/if}}
+                    <button type="button" class="btn btn-primary btnSaveAvailability">Speichern</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-default btnCancel">Abbrechen</button>
+                </div>
+            {{/with}}
+        {{/if}}
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
