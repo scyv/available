@@ -22,6 +22,7 @@ Router.route("/project/:projectId", function () {
     Meteor.subscribe("projects", projectId, () => {
         Session.set(SessionProps.SELECTED_PROJECT, projectId);
     });
+    Session.set("SPRINT_VIEW_RENDERED", false);
     this.render("sprints");
 }, {name: "sprints"});
 

@@ -1,5 +1,6 @@
 import { Template } from "meteor/templating";
 import {sprintsHandle} from "./main";
+import {projectsHandle} from "./main";
 import { SessionProps} from "./sessionProperties"
 
 function sumAvailabilities(sprintId) {
@@ -16,56 +17,70 @@ function getVelocityWindow() {
     return undefined;
 }
 
-class StoryPointCalculator {
-
-    calculate(sprint) {
-        let sumVelocity = 0;
-        let count = 0;
-        let velocityWindow = sprint.velocityWindow;
-        let collectedSprints = [];
-        let velocityWindowIndex = 3;
-        const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
-        Sprints.find({stop: {$lt: sprint.start}}, {sort: {start: -1}}).forEach((otherSprint) => {
-            if (otherSprint.burnedSPs > 0) {
-                if (velocityWindow) {
-                    if (velocityWindow.indexOf(otherSprint._id) < 0) {
-                        return;
-                    }
-                } else {
-                    if (velocityWindowIndex-- <= 0) {
-                        return;
-                    }
-                    collectedSprints.push(otherSprint._id);
+function calculatePossibleStoryPoints(sprint) {
+    let sumVelocity = 0;
+    let count = 0;
+    let velocityWindow = sprint.velocityWindow;
+    let collectedSprints = [];
+    let velocityWindowIndex = 3;
+    const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
+    Sprints.find({stop: {$lt: sprint.start}}, {sort: {start: -1}}).forEach((otherSprint) => {
+        if (otherSprint.burnedSPs > 0) {
+            if (velocityWindow) {
+                if (velocityWindow.indexOf(otherSprint._id) < 0) {
+                    return;
                 }
-                const availabilities = sumAvailabilities(otherSprint._id);
-                if (availabilities > 0) {
-                    sumVelocity += otherSprint.burnedSPs / availabilities * project.hoursPerDay;
-                    count++;
+            } else {
+                if (velocityWindowIndex-- <= 0) {
+                    return;
                 }
+                collectedSprints.push(otherSprint._id);
             }
-        });
-        if (count == 0) {
-            sumVelocity = 1;
-            count = 1;
+            const availabilities = sumAvailabilities(otherSprint._id);
+            if (availabilities > 0) {
+                sumVelocity += otherSprint.burnedSPs / availabilities * project.hoursPerDay;
+                count++;
+            }
         }
-        const averageVelocity = sumVelocity / count;
-
-        if (!velocityWindow) {
-            Sprints.update({_id: sprint._id}, {$set: {velocityWindow: collectedSprints}});
-        }
-        Sprints.update({_id: sprint._id}, {$set: {averageVelocity: averageVelocity}});
-
-        const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
-        return ((averageVelocity * sumAvailabilities(sprint._id) / project.hoursPerDay).toFixed(2)) + velocity;
+    });
+    if (count == 0) {
+        sumVelocity = 1;
+        count = 1;
     }
+    const averageVelocity = sumVelocity / count;
+    if (!velocityWindow) {
+        updateVelocityWindow(sprint._id, collectedSprints);
+    }
+    if (sprint.averageVelocity !== averageVelocity) {
+        updateAverageVelocity(sprint._id, averageVelocity);
+    }
+    const velocity = " (V: " + averageVelocity.toFixed(2) + ")";
+    return ((averageVelocity * sumAvailabilities(sprint._id) / project.hoursPerDay).toFixed(2)) + velocity;
 }
+
+function updateVelocityWindow(sprintId, velocityWindow) {
+    Sprints.update({_id: sprintId}, {$set: {velocityWindow: velocityWindow}}, (err)=> {
+        if (err) {
+            console.warn(err);
+        }
+    });
+}
+
+function updateAverageVelocity(sprintId, averageVelocity) {
+    Sprints.update({_id: sprintId}, {$set: {averageVelocity: averageVelocity}}, (err)=> {
+        if (err) {
+            console.warn(err);
+        }
+    });
+}
+
 
 Template.sprints.helpers({
     selectedProject() {
         return Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
     },
     sprintsLoading() {
-        return !sprintsHandle.ready();
+        return !sprintsHandle.ready() || !projectsHandle.ready();
     },
     isSprintSelected() {
         const isSelected = Session.get(SessionProps.SELECTED_SPRINT) === this._id;
@@ -90,7 +105,10 @@ Template.sprints.helpers({
         return "noSps";
     },
     possibleSps() {
-        return new StoryPointCalculator().calculate(this);
+        if (Session.get("SPRINT_VIEW_RENDERED")) {
+            return calculatePossibleStoryPoints(this);
+        }
+        return 0;
     },
     velocity() {
         const availabilities = sumAvailabilities(this._id);
@@ -132,7 +150,10 @@ Template.sprints.onRendered(() => {
                 });
             }
         }
-    }, 100);
+
+        // THIS IS A WORKAROUND FOR AN ISSUE IN THE BLAZE ENGINE
+        Session.set("SPRINT_VIEW_RENDERED", true);
+    }, 500);
 });
 
 Template.sprints.events({
@@ -147,6 +168,7 @@ Template.sprints.events({
         return false;
     },
     "click .btnOpenAvailabilities"() {
+        Session.set(SessionProps.SELECTED_SPRINT, this._id);
         Router.go("availabilities", {sprintId: this._id});
         return false;
     },
@@ -160,6 +182,7 @@ Template.sprints.events({
         } else {
             velocityWindow = _.without(velocityWindow, this._id);
         }
-        Sprints.update({_id: Session.get(SessionProps.SELECTED_SPRINT)}, {$set: {velocityWindow: velocityWindow}});
+        const selectedSprintId = Session.get(SessionProps.SELECTED_SPRINT);
+        updateVelocityWindow(selectedSprintId, velocityWindow);
     }
 });
