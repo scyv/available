@@ -37,7 +37,7 @@ Template.availabilities.helpers({
             const avWindow = Session.get(SessionProps.AVAILABILITY_WINDOW);
             Session.set(SessionProps.AVAILABILITY_POSSIBLE_SP + av._id, possibleSP);
 
-            if (avWindow.length === 0 || avWindow.includes(av._id)) {
+            if (avWindow && (avWindow.length === 0 || avWindow.includes(av._id))) {
                 sumAvailability += availabilityInDays;
                 sumPossibleStoryPoints += possibleSP;
             }
