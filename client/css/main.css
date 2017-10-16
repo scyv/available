@@ -17,6 +17,10 @@ button {
     margin-right: 5px;
 }
 
+tfoot .sumRow {
+    background-color: #ffd6c6;
+}
+
 td.center, th.center {
     text-align: center;
 }
@@ -34,11 +38,15 @@ tr.sprintRow label, tr.sprintRow label input {
     background: #ffd6c6;
 }
 
-.table-striped tr.sprintRow.for-calculation {
+.table-striped tr.sprintRow.for-calculation, .table-striped tr.availabilityRow.for-calculation {
     background: #fffcc8;
 }
 
 .noSps {
     color: red;
+}
+
+.selectionButtons button {
+    padding:0;
 }
 

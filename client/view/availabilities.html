@@ -13,7 +13,7 @@
 				<thead>
 					<tr>
 						<th>Teammitglied</th>
-						<th class="center">Verfügbarkeit (h)</th>
+						<th class="center">Verfügbarkeit (h/Tage)</th>
                         {{#if sprintVelocity}}
                             <th class="center">Mögliche SP (V: {{sprintVelocity}})</th>
                         {{/if}}
@@ -27,8 +27,14 @@
                         </td>
                     </tr>
 					{{#each availabilities}}
-						<tr>
-							<td>{{name}}</td>
+						<tr class="availabilityRow">
+							<td>
+                                <label>
+                                   <input type="checkbox" class="checkForSum" checked="{{useForSum}}"
+                                          title="Diese Verfügbarkeit in die Summe miteinbeziehen" />
+                                    {{name}}
+                                </label>
+                            </td>
 							<td class="center">{{availability}}</td>
                             {{#if sprintVelocity}}
                                 <td class="center">{{possibleSP}}</td>
@@ -43,6 +49,22 @@
 						</tr>
 					{{/each}}
 				</tbody>
+                <tfoot>
+                <tr class="sumRow">
+                    <td>Summe:</td>
+                    <td class="center">{{availabilitySum}}</td>
+                    <td class="center">{{storyPointSum}}</td>
+                    <td></td>
+                </tr>
+                <tr class="selectionButtons">
+                    <td colspan="4">
+                        <span class="text-small">Selektion:</span>
+                        <button class="btn btn-small btn-link btnSelectAll">Alle</button>
+                        <button class="btn btn-small btn-link btnSelectInvert">Invert</button>
+                        <button class="btn btn-small btn-link btnSelectNone">Reset</button>
+                    </td>
+                </tr>
+                </tfoot>
 			</table>
 			{{>shareLink}}
 		{{/if}}
