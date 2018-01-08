@@ -1,0 +1,13 @@
+stages:
+  - npm_install
+  - create_bundle
+
+job_npm_install:
+  stage: npm_install
+  script:
+    - npm install --production
+
+job_create_bundle:
+  stage: create_bundle
+  script:
+    - meteor build . --server https://available.scytec.de
