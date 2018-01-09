@@ -1,3 +1,4 @@
+# ci configuration
 stages:
   - npm_install
   - create_bundle
