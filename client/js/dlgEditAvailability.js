@@ -8,7 +8,6 @@ Template.dlgEditAvailability.helpers({
         return !availabilitiesHandle.ready();
     },
     availabilityEntity() {
-        $("#availabilityBaseHours").prop("checked", true);
         const selectedAvailability = Session.get(SessionProps.SELECTED_AVAILABILITY);
         let availability = {availability: 0};
         if (selectedAvailability) {
@@ -21,39 +20,21 @@ Template.dlgEditAvailability.helpers({
             availability.sprintName = sprint.name;
             availability.sprintStart = sprint.start;
             availability.sprintEnd = sprint.stop;
+            availability.availability = availability.availability / project.hoursPerDay;
         }
         return availability;
     }
 });
 
 Template.dlgEditAvailability.events({
-    "change #availabilityBaseHours, change #availabilityBaseDays"() {
-        const projectId = Session.get(SessionProps.SELECTED_PROJECT);
-        const inputField = $("#availabilityInput");
-        const availability = parseFloat(inputField.val());
-        const project = Projects.findOne({_id: projectId});
-        if (project) {
-            const hoursPerDay = project.hoursPerDay;
-            if ($("#availabilityBaseHours").prop("checked")) {
-                inputField.val((availability * hoursPerDay).toFixed(0));
-            } else {
-                inputField.val((availability / hoursPerDay).toFixed(0));
-            }
-        }
-    },
     "click .btnSaveAvailability"() {
         const sprintId = Session.get(SessionProps.SELECTED_SPRINT);
         const projectId = Session.get(SessionProps.SELECTED_PROJECT);
 
         const name = $("#developerNameInput").val();
-        let availability = parseFloat($("#availabilityInput").val());
-
-        if ($("#availabilityBaseDays").prop("checked")) {
-            availability = availability * Projects.findOne({_id: projectId}).hoursPerDay;
-        }
-
-        $("#availabilityBaseHours").prop("checked", true);
-
+        let availability = parseFloat($("#availabilityInput").val());        
+        availability = availability * Projects.findOne({_id: projectId}).hoursPerDay;
+        
         const obj = {name, availability, sprintId, projectId};
         if (this._id) {
             Availabilities.update({_id: this._id}, {$set: obj});
