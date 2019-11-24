@@ -24,6 +24,7 @@ function calculatePossibleStoryPoints(sprint) {
     let collectedSprints = [];
     let velocityWindowIndex = 3;
     const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
+
     Sprints.find({stop: {$lt: sprint.start}}, {sort: {start: -1}}).forEach((otherSprint) => {
         if (otherSprint.burnedSPs > 0) {
             if (velocityWindow) {
@@ -38,7 +39,8 @@ function calculatePossibleStoryPoints(sprint) {
             }
             const availabilities = sumAvailabilities(otherSprint._id);
             if (availabilities > 0) {
-                sumVelocity += otherSprint.burnedSPs / availabilities * project.hoursPerDay;
+                const otherSprintVelo = otherSprint.burnedSPs / ((availabilities / project.hoursPerDay) * otherSprint.averageVelocity);
+                sumVelocity += otherSprintVelo;
                 count++;
             }
         }
@@ -96,7 +98,8 @@ Template.sprints.helpers({
         return Sprints.find({}, {sort: {stop: -1}});
     },
     availabilities() {
-        return sumAvailabilities(this._id);
+        const project = Projects.findOne(Session.get(SessionProps.SELECTED_PROJECT));
+        return (sumAvailabilities(this._id) / project.hoursPerDay).toFixed(2);
     },
     noSps() {
         if (this.burnedSPs > 0) {
@@ -113,7 +116,7 @@ Template.sprints.helpers({
     velocity() {
         const availabilities = sumAvailabilities(this._id);
         if (availabilities > 0) {
-            return (this.burnedSPs * 8 / availabilities).toFixed(2);
+            return (this.burnedSPs * 8 / availabilities / this.averageVelocity).toFixed(2);
         }
         return (0).toFixed(2);
     },
