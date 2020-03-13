@@ -1,0 +1,28 @@
+<template name="dlgFixPlanning">
+    <div class="modal fade" id="dlgFixPlanning" tabindex="-1" role="dialog" aria-labelledby="dlgFixPlanningLabel">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {{#if sprintsLoading}}
+                {{else}}
+                {{#with sprint}}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="dlgFixPlanningLabel">Planung fixieren</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="planningInput">Geplante Storypoints für {{name}}</label>
+                        <input type="text" class="form-control planningInput" placeholder="Storypoints"
+                            value="{{plannedSp}}" id="planningInput">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btnFixPlanning">Fixieren</button>
+                    <button type="button" data-dismiss="modal" class="btn btn-default btnCancel">Abbrechen</button>
+                </div>
+                {{/with}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</template>

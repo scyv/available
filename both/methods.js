@@ -1,6 +1,20 @@
 import { Meteor } from 'meteor/meteor'
 
 Meteor.methods({
+    'fixPlanning'(sprintId, planning) {
+        let planningInt = parseInt(planning, 10);
+        let velocityWindow = [];
+        if (isNaN(planningInt)) {
+            planningInt = null;
+            velocityWindow = null;
+        }
+        Sprints.update(sprintId, {
+            $set: {
+                fixedPlanning: planningInt,
+                velocityWindow: velocityWindow,
+            }
+        });
+    },
     'updateProject'(projectId, name, hoursPerDay) {
         Projects.update({ _id: projectId, owner: this.userId }, { $set: { name: name, hoursPerDay: hoursPerDay } });
     },
@@ -23,6 +37,6 @@ Meteor.methods({
         const project = Projects.findOne({ _id: Availabilities.findOne(availabilityId).projectId, owner: this.userId });
         if (project) {
             Availabilities.remove(availabilityId);
-        }            
+        }
     }
 });

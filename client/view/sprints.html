@@ -1,65 +1,77 @@
 <template name="sprints">
 	<div class="breadcrumb">
 		{{#if currentUser}}
-			<a href="{{urlFor route='projects'}}">Projekte</a> &raquo;
+		<a href="{{urlFor route='projects'}}">Projekte</a> &raquo;
 		{{/if}}
 		{{selectedProject.name}}
 	</div>
 	<div class="table-striped">
 		{{#if sprintsLoading}}
-			Laden...
+		Laden...
 		{{else}}
-			<table class="table table-striped table-hover">
-				<thead>
-					<tr>
-						<th>Name</th>
-						<th>Datum Start</th>
-						<th>Datum Stop</th>
-						<th class="center">Verfügbarkeiten (Tage)</th>
-						<th class="center">Mögliche SPs</th>
-						<th class="center">Erreichte SPs</th>
-						<th class="center">Velocity</th>
-                        <th></th>
-					</tr>
-				</thead>
-				<tbody>
-                    <tr>
-                        <td colspan="8">
-                                <button class="btn btn-success btnCreateSprint">Sprint anlegen</button>
-                        </td>
-                    </tr>
-					{{#each sprints}}
-						<tr class="sprintRow sprint-{{_id}}">
-							<td>
-                                <label for="selectedSprint-{{_id}}">
-                                    <input type="radio" id="selectedSprint-{{_id}}" name="selectedSprint" class="selectSprint" checked="{{isSprintSelected}}"
-                                            title="Klicken für Berechnung von möglichen Storypoints"/> {{name}}
-                                </label>
-                            </td>
-							<td>{{formattedDate start}}</td>
-							<td>{{formattedDate stop}}</td>
-							<td class="center">{{availabilities}}</td>
-							<td class="center">{{possibleSps}}</td>
-							<td class="center {{noSps}}">{{burnedSPs}}</td>
-							<td class="center">
-                                <label>
-                                    <input type="checkbox" class="checkForVelocity" title="Diesen Sprint in die Berechnung der möglichen Storypoints einbeziehen"
-                                           checked="{{useForVelocityCalculation}}" /> {{velocity}}
-                                </label>
-                            </td>
-							<td>
-								<button class="btn btn-default btn-xs pull-right btnOpenAvailabilities">Verfügbarkeiten</button>
-								<button class="btn btn-default btn-xs pull-right btnEditSprint">Bearbeiten</button>
-							</td>
-						</tr>
-					{{else}}
-						<tr>
-							<td colspan="8"><div class="alert alert-warning">Es wurden noch kein Sprint erfasst.</div></td>
-						</tr>
-					{{/each}}
-				</tbody>
-			</table>
-			{{>shareLink}}
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Datum Start</th>
+					<th>Datum Stop</th>
+					<th class="center">Verfügbarkeiten (Tage)</th>
+					<th class="center">Mögliche SPs</th>
+					<th class="center">Erreichte SPs</th>
+					<th class="center">Velocity</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td colspan="8">
+						<button class="btn btn-success btnCreateSprint">Sprint anlegen</button>
+					</td>
+				</tr>
+				{{#each sprints}}
+				<tr class="sprintRow sprint-{{_id}} {{forCalcClass}}">
+					<td>
+						<label for="selectedSprint-{{_id}}">
+							<input type="radio" id="selectedSprint-{{_id}}" name="selectedSprint" class="selectSprint"
+								checked="{{isSprintSelected}}"
+								title="Klicken für Berechnung von möglichen Storypoints" /> {{name}}
+						</label>
+					</td>
+					<td>{{formattedDate start}}</td>
+					<td>{{formattedDate stop}}</td>
+					<td class="center">{{availabilities}}</td>
+					<td class="center">{{possibleSps}}</td>
+					<td class="center {{noSps}}">{{burnedSPs}}</td>
+					<td class="center">
+						<label>
+							{{#if checkForVelocityEnabled}}
+							<input type="checkbox" class="checkForVelocity"
+								title="Diesen Sprint in die Berechnung der möglichen Storypoints einbeziehen"
+								checked="{{useForVelocityCalculation}}" />
+							{{/if}}
+							{{velocity}}
+						</label>
+					</td>
+					<td>
+						{{#if isFixed}}
+							<button class="btn btn-info btn-xs pull-right btnReleaseFix">Fixierung lösen</button>
+						{{else}}
+							<button class="btn btn-primary btn-xs pull-right btnFixPlanning">Planung fixieren</button>
+						{{/if}}
+						<button class="btn btn-default btn-xs pull-right btnOpenAvailabilities">Verfügbarkeiten</button>
+						<button class="btn btn-default btn-xs pull-right btnEditSprint">Bearbeiten</button>
+					</td>
+				</tr>
+				{{else}}
+				<tr>
+					<td colspan="8">
+						<div class="alert alert-warning">Es wurden noch kein Sprint erfasst.</div>
+					</td>
+				</tr>
+				{{/each}}
+			</tbody>
+		</table>
+		{{>shareLink}}
 		{{/if}}
 	</div>
 </template>
